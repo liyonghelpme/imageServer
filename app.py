@@ -3,7 +3,9 @@ from flask import Flask, request, render_template, url_for
 from werkzeug.utils import secure_filename
 import os
 
+DEBUG=True
 app = Flask(__name__)
+app.config.from_object(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/upload', methods=['GET', 'POST'])
@@ -14,7 +16,7 @@ def upload():
         f = request.files['file']
         fname = secure_filename(f.filename)
         f.save(fname)
-        os.system('python genMd5.py '+fname)
+        os.system('python genMd5.py '+fname+'; mv %s ../images/'%(fname))
         return '成功了'
 
 if __name__ == '__main__':

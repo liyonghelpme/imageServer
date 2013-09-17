@@ -3,12 +3,13 @@ import sys
 import hashlib
 npic = sys.argv[1]
 
-f = open('ser.ini')
 images = {}
-for l in f.readlines():
-    res = l.split('=')
-    images[res[0]] = res[1].replace('\n', '')
-f.close()
+if os.path.exists('../images/ser.ini'):
+    f = open('../images/ser.ini')
+    for l in f.readlines():
+        res = l.split('=')
+        images[res[0]] = res[1].replace('\n', '')
+    f.close()
 
 p = open(npic)
 con = p.read()
@@ -19,8 +20,9 @@ images[npic] = v.hexdigest()
 
 import time
 s = time.strftime('%Y-%m-%d-%H-%M-%S', time.localtime())
-os.system('mv ser.ini ser.ini-'+s)
-nf = open('ser.ini', 'w')
+os.system('mv ../images/ser.ini ser.ini-'+s)
+nf = open('../images/ser.ini', 'w')
+
 first = True
 for k in images:
     if first:
