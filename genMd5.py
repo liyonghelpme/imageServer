@@ -16,6 +16,7 @@ con = p.read()
 p.close()
 
 v = hashlib.md5(con)
+npic = os.path.basename(npic)
 images[npic] = v.hexdigest()
 
 import time
