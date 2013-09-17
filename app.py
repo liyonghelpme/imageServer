@@ -16,6 +16,7 @@ def upload():
         f.save(fname)
         os.system('python genMd5.py '+fname)
         return '成功了'
+
 if __name__ == '__main__':
     app.run(debug=True, port=9999, host='0.0.0.0')
 
