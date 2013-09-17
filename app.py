@@ -7,6 +7,15 @@ DEBUG=True
 app = Flask(__name__)
 app.config.from_object(__name__)
 
+def transFile(cur):
+    allF = os.listdir(cur)
+    for i in allF:
+        fn = os.path.join(cur, i)
+        if i.find('png') != -1 or i.find('jpg') != -1 or i.find('mp3') != -1:
+            os.system('python genMd5.py %s; mv %s ../images' % (fn, fn))
+        elif os.path.isdir(fn):
+            transFile(fn)
+        
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -16,7 +25,21 @@ def upload():
         f = request.files['file']
         fname = secure_filename(f.filename)
         f.save(fname)
-        os.system('python genMd5.py '+fname+'; mv %s ../images/'%(fname))
+        if fname[-4:] == '.zip':
+            if os.path.exists('temp'):
+                os.system('rm temp -rf')
+            os.system('mkdir temp')
+            os.system('unzip %s -d temp' % (fname))
+            allF = os.listdir('temp')
+            cur = 'temp'
+            transFile(cur)
+            #for i in allF:
+            #    if i.find('png') != -1 or i.find('jpg') != -1 or i.find('mp3') != -1:
+            #        os.system('python genMd5.py temp/%s; mv temp/%s ../images' % (i, i))
+            #    elif os.path.isdir('temp/')
+            #os.system('mv temp/* ')
+        else:
+            os.system('python genMd5.py '+fname+'; mv %s ../images/'%(fname))
         return '成功了'
 
 if __name__ == '__main__':
