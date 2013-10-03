@@ -9,12 +9,15 @@ app.config.from_object(__name__)
 
 def transFile(cur):
     allF = os.listdir(cur)
+    mvFiles = []
     for i in allF:
         fn = os.path.join(cur, i)
-        if i.find('png') != -1 or i.find('jpg') != -1 or i.find('mp3') != -1:
+        if i.find('.png') != -1 or i.find('.jpg') != -1 or i.find('.mp3') != -1 or i.find('.fnt') != -1 or i.find(".plist") != -1:
             os.system('python genMd5.py %s; mv %s ../images' % (fn, fn))
+            mvFiles.append(i)
         elif os.path.isdir(fn):
             transFile(fn)
+    print "mvFiles", mvFiles
         
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/upload', methods=['GET', 'POST'])
